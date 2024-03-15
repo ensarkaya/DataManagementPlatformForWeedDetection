@@ -1,0 +1,28 @@
+os: linux
+language: minimal
+services:
+- docker
+# DOCKER_USERNAME/DOCKER_PASSWORD have been configured in Travis CI
+# env:
+before_install:
+- echo "Before install"
+before_script:
+- docker pull overv/openstreetmap_tile_server || true
+script:
+- docker build --pull --cache-from overv/openstreetmap_tile_server --tag overv/openstreetmap_tile_server .
+- docker volume create osm-data
+- docker run --rm -v osm-data:/data/database/ overv/openstreetmap_tile_server import
+- docker run --rm -v osm-data:/data/database/ -p 8080:80 -d overv/openstreetmap_tile_server run
+- sleep 30
+- make DOCKER_IMAGE=overv/openstreetmap_tile_server stop
+after_script:
+- docker images
+after_success:
+- if [[ "$TRAVIS_BRANCH" == "master" ]];
+  then
+  docker images ;
+  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin ;
+  docker push overv/openstreetmap_tile_server ;
+  fi
+notifications:
+  email: true

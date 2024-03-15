@@ -1,0 +1,82 @@
+version: "3.3"
+
+services:
+  db:
+    image: postgis/postgis
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d mydatabase"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: 123456789
+    ports:
+      - "5432:5432"
+
+  backend:
+    depends_on:
+      db:
+        condition: service_healthy
+    build: ./backend/mythesisbackend
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend/mythesisbackend:/usr/src/app
+      - media_volume:/usr/src/app/media
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend/my-app
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/my-app:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - backend
+
+  qcluster:
+    build: ./backend/mythesisbackend
+    command: >
+      /bin/bash -c "export PYTHONPATH=/usr/src/app &&
+      python wait_for_db.py &&
+      python manage.py qcluster"
+    volumes:
+      - ./backend/mythesisbackend:/usr/src/app
+      - media_volume:/usr/src/app/media
+    depends_on:
+      - backend
+
+  osm-tile-server:
+    image: overv/openstreetmap-tile-server
+    ports:
+      - "8080:80"
+    volumes:
+      - osm-data:/data/database
+      - osm-tiles:/data/tiles
+      - ./openstreetmap_tile_server/data/niederbayern-latest.osm.pbf:/data/region.osm.pbf
+    environment:
+      - ALLOW_CORS=enabled
+    command: import # You need to first use the command 'import' to load your .osm.pbf data, then you can use the command 'run' to start the server.
+
+  flask_ai:
+    build: 
+      context: .
+      dockerfile: ./flask_app/Dockerfile
+    volumes:
+      - ./flask_app:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend
+
+volumes:
+  media_volume: {}
+  osm-data: {}
+  osm-tiles: {}

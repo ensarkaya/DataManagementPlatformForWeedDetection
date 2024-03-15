@@ -1,0 +1,7 @@
+{Error starting userland proxy: listen tcp4 0.0.0.0:5432: bind: address already in use,
+sudo lsof -i :5432
+sudo kill -9 <PID>
+docker-compose up
+}
+To set up shh to redirect frontend runnning on server to localhost:3000:
+ssh -L 3000:localhost:3000 ekaya@10.154.6.34   

@@ -1,0 +1,20 @@
+# Use an official Node runtime as a parent image
+FROM node:14
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy package.json and yarn.lock
+COPY package.json yarn.lock ./
+
+# Install project dependencies
+RUN yarn install
+
+# Bundle app source
+COPY . .
+
+# The command to start the development server
+CMD ["yarn", "start"]
+
+# Expose port 3000
+EXPOSE 3000
