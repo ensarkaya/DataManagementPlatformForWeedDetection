@@ -14,8 +14,8 @@ To set up this project, follow these steps:
 
 1. Clone the repository and switch to the main branch:
    ```bash
-   git clone https://github.com/ensarkaya/thesisProject
-   cd thesisProject
+   git clone https://github.com/ensarkaya/DataManagementPlatformForWeedDetection
+   cd DataManagementPlatformForWeedDetection
 
 2. Build and run the Docker containers:
     ```bash
