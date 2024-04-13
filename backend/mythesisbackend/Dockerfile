@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     binutils \
     libproj-dev \
     gdal-bin \
-    python3-gdal
+    python3-gdal \ 
+    postgresql-client
 
 # Copy the current directory contents into the container at /usr/src/app
 COPY . /usr/src/app
