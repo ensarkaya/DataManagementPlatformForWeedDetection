@@ -22,7 +22,14 @@ services:
       db:
         condition: service_healthy
     build: ./backend/mythesisbackend
-    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    command: >
+      bash -c "while ! pg_isready -h db -p 5432 -U myuser; do
+      sleep 1;
+      done;
+      echo 'PostgreSQL started';
+      python manage.py makemigrations api &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend/mythesisbackend:/usr/src/app
       - media_volume:/usr/src/app/media
