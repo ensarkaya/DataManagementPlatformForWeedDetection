@@ -24,7 +24,7 @@ import {
   DeleteOutlined,
   PlayCircleOutlined,
 } from "@ant-design/icons";
-
+import { getApiHost } from "../../api/httpClients/essentials";
 interface UAVFlightProps {
   id: number;
   flight_date: string;
@@ -201,7 +201,7 @@ const ListUAVFlights = () => {
                           <Image
                             key={index}
                             width={200}
-                            src={`http://10.154.6.34:8000${image.resized_image}`}
+                            src={`${getApiHost()}${image.resized_image}`}                            
                             alt={`Flight Image ${index}`}
                           />
                           <Tooltip title="Run analysis for this image">

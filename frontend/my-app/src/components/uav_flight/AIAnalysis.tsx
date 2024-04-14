@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { List, Card, Spin, Image, Pagination, Space, Row , Col} from 'antd';
 import { useGetGeneratedImagesForUAVFlightQuery, useUavFlightsWithCompletedAnalysisQuery } from '../../store/aiAnalysisApi';
 import { useAppSelector } from '../../store/hooks';
+import { getApiHost } from '../../api/httpClients/essentials';
 import moment from 'moment';
 
 const AIAnalysisPage = () => {
@@ -92,14 +93,14 @@ const AIAnalysisPage = () => {
                             <Image
                               key={image.id + '_original_' + index}
                               width="100%"
-                              src={`http://10.154.6.34:8000${image.image_details.resized_image}`}
+                              src={`${getApiHost()}${image.image_details.resized_image}`}
                               alt={`"Original Image" ${index}`}
                               style={{ marginBottom: 8 }}
                             />
                             <Image
                               key={image.id + '_processed_' + index}
                               width="100%"
-                              src={`http://10.154.6.34:8000${image.generated_image}`}
+                              src={`${getApiHost()}${image.generated_image}`}
                               alt={`"Processed Image" ${index}`}
                               style={{ marginBottom: 8 }}
                             />

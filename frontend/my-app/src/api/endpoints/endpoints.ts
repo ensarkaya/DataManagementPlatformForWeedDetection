@@ -33,7 +33,7 @@ const start_analysis = `api/analysis-job/`;
 const get_generated_images_for_uav_flight = `api/get-generated-images-for-uav-flight/`;
 const uav_flights_with_completed_analysis = `api/uav-flights-with-completed-analysis/`;
 
-export const tile_layer_url = `http://10.154.6.34:8080/tile/{z}/{x}/{y}.png`;
+export const tileLayerUrl = process.env.TILE_LAYER_URL || 'http://10.154.6.34:8080/tile/{z}/{x}/{y}.png';
 export {
   add_processing_result_to_field_image,
   add_image_to_field_season,

@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+ 
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,9 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k-yq76d@3klp(&=n^(#q=np*r(+z%nm)cwz9p*t5h1m6(^0h8r'
-
-
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-k-yq76d@3klp(&=n^(#q=np*r(+z%nm)cwz9p*t5h1m6(^0h8r')
 
 ALLOWED_HOSTS = ['*']
 
@@ -92,11 +93,11 @@ WSGI_APPLICATION = 'mythesisbackend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'mydatabase',
-        'USER': 'myuser',
-        'PASSWORD': '123456789',  # Use the password you set while creating the user
-        'HOST': 'db',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME', 'mydatabase'),
+        'USER': os.getenv('DB_USER', 'myuser'),
+        'PASSWORD': os.getenv('DB_PASSWORD', '123456789'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -149,31 +150,31 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 Q_CLUSTER = {
-    'name': 'DjangORM',
-    'workers': 1,
-    'timeout': 1200,
-    'retry': 1201,
-    'queue_limit': 200,
-    'bulk': 1,
-    'orm': 'default',
-    'ack_failures': True,
-    'max_attempts': 1,
-    'attempt_count': 1
+    'name': os.getenv('Q_CLUSTER_NAME', 'DjangORM'),
+    'workers': int(os.getenv('Q_WORKERS', 1)),
+    'timeout': int(os.getenv('Q_TIMEOUT', 1200)),
+    'retry': int(os.getenv('Q_RETRY', 1201)),
+    'queue_limit': int(os.getenv('Q_QUEUE_LIMIT', 200)),
+    'bulk': int(os.getenv('Q_BULK', 1)),
+    'orm': os.getenv('Q_ORM', 'default'),
+    'ack_failures': os.getenv('Q_ACK_FAILURES', 'True') == 'True',
+    'max_attempts': int(os.getenv('Q_MAX_ATTEMPTS', 1)),
+    'attempt_count': int(os.getenv('Q_ATTEMPT_COUNT', 1))
 }
 
 # Flask AI Service URL
-FLASK_SERVICE_URL = 'http://flask_ai:5000'
+FLASK_SERVICE_URL = os.getenv('FLASK_SERVICE_URL', 'http://flask_ai:5000')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'  # This is literally the string 'apikey'
-EMAIL_HOST_PASSWORD = 'Placeholder'  # Replace with your actual SendGrid API key
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.sendgrid.net')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'apikey')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'Placeholder')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-DEBUG_MODE = False
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG_MODE = os.getenv('DEBUG_MODE', 'False') == 'True'
 
 LOGGING = {
     'version': 1,
@@ -198,4 +199,4 @@ LOGGING = {
     },
 }
 
-DATA_UPLOAD_MAX_NUMBER_FILES = 250
+DATA_UPLOAD_MAX_NUMBER_FILES = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FILES', 250))
