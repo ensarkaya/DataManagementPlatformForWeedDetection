@@ -72,7 +72,7 @@ services:
       - ./openstreetmap_tile_server/data/niederbayern-latest.osm.pbf:/data/region.osm.pbf
     environment:
       - ALLOW_CORS=enabled
-    command: run # You need to first use the command 'import' to load your .osm.pbf data, then you can use the command 'run' to start the server.
+    command: import # You need to first use the command 'import' to load your .osm.pbf data, then you can use the command 'run' to start the server.
 
   flask_ai:
     build: 

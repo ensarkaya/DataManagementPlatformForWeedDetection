@@ -14,4 +14,4 @@ ExifRead==3.0.0
 django-q==1.3.9
 requests
 sendgrid>=6.0.0
-python-dotenv=1.0.1
+python-dotenv==1.0.1
