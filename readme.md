@@ -22,14 +22,15 @@ To set up this project, follow these steps:
     docker-compose up --build
 
 3. Wait a couple of minutes until you see the following logs: 
-    osm-tile-server_1  | + exit 0
-    datamanagementplatformforweeddetection_osm-tile-server_1 exited with code 0
+   ```bash
+   osm-tile-server_1  | + exit 0
+   datamanagementplatformforweeddetection_osm-tile-server_1 exited with code 0
 
-4. Stop the Docker containers using `Ctrl + C`.
+5. Stop the Docker containers using `Ctrl + C`.
 
-5. Open the `docker-compose.yml` file and modify the `osm-tile-server` image command from `import` to `run`.
+6. Open the `docker-compose.yml` file and modify the `osm-tile-server` image command from `import` to `run`.
 
-6. Start the Docker containers again:
+7. Start the Docker containers again:
     ```bash
     docker-compose up 
 
